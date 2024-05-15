@@ -24,6 +24,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.DOMAIN }} << 'EOF'
             cd chauchas-backend/
+            pkill -f 'python3 main.py' || true
             git pull
-            python3 main.py
+            nohup python3 main.py > uvicorn.log 2>&1 &
           EOF
