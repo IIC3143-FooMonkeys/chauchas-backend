@@ -6,7 +6,7 @@ from config.database import discountsTable
 
 router = APIRouter()
 
-@app.get("/")
+@router.get("/")
 def read_root():
     return {"message": "Hello World"}
 
