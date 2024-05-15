@@ -26,6 +26,5 @@ jobs:
             cd chauchas-backend/
             pkill -f 'python3 main.py' || true
             git pull
-            export MONGO_URL=${{ secrets.MONGO_URL }}
             nohup python3 main.py > uvicorn.log 2>&1 &
           EOF
