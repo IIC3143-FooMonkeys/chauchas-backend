@@ -24,7 +24,12 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.DOMAIN }} << 'EOF'
             cd chauchas-backend/
+            # Check if any python process is running and kill it
             pkill -f 'python3 main.py' || true
+            # Pull latest changes from git
             git pull
+            # Export environment variable
+            export MONGO_URL=${{ secrets.MONGO_URL }}
+            # Start Uvicorn in the background
             nohup python3 main.py > uvicorn.log 2>&1 &
           EOF
