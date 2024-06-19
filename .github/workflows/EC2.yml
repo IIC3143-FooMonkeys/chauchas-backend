@@ -2,10 +2,10 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
 
 jobs:
   deploy:
@@ -19,11 +19,13 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
+
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.DOMAIN }} << 'EOF'
+          BRANCH=$(echo ${{ github.ref }} | sed 's|refs/heads/||')
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.DOMAIN }} << EOF
             cd chauchas-backend/
             pkill -f 'python3 main.py' || true
-            git pull
+            git pull origin $BRANCH
             nohup python3 main.py > uvicorn.log 2>&1 &
           EOF
