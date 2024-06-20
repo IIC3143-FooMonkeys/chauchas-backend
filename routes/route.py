@@ -204,7 +204,7 @@ async def read_user(id: str):
 @router.put("/users/{id}", response_model=User)
 async def update_user(id: str, user: User):
     if usersTable.find_one({"_id": ObjectId(id)}) is not None:
-        usersTable.update_one({"_id": ObjectId(id)}, {"$set": userEntity(user)})
+        usersTable.update_one({"_id": ObjectId(id)}, {"$set": user.model_dump()})
         updated_user = usersTable.find_one({"_id": ObjectId(id)})
         return userEntity(updated_user)
     raise HTTPException(status_code=404, detail=f"User with id {id} not found")
