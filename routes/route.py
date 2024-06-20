@@ -7,6 +7,8 @@ from bson import ObjectId
 
 router = APIRouter()
 
+# ROUTES FOR DISCOUNTS #
+
 @router.get("/")
 def read_root():
     return {"message": "Hello World"}
@@ -20,8 +22,6 @@ async def get_discounts(page: int = 1, count: int = 25, category: Optional[str] 
 
     discounts = list(discountsTable.find(query).skip(offset).limit(count))
     return discountEntities(discounts)
-
-
 
 @router.post("/discounts", response_model=Discount, status_code=status.HTTP_201_CREATED)
 async def create_discount(discount: Discount):
