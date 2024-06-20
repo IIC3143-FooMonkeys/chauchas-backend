@@ -36,6 +36,7 @@ def discountEntity(discount) -> dict:
         "days": str(discount["days"]),
         "card": str(discount["card"]),
         "cardType": str(discount["cardType"]),
+        "paymentType": str(discount["paymentType"]),
         "bankName": str(discount["bankName"])
     }
 def bankEntity(bank) -> dict:
