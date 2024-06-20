@@ -231,9 +231,13 @@ async def add_card_to_user(userId: str, cardId: str):
 @router.put("/users/{userId}/delete-card/{cardId}", response_model=User)
 async def add_card_to_user(userId: str, cardId: str):
     if (user := usersTable.find_one({"_id": ObjectId(userId)})) is not None:
-        print(user["cards"])
-        if (card := usersTable.find_one({"_id": ObjectId(cardId), "cards._id": ObjectId(cardId)})) is not None:
-            usersTable.update_one({"_id": ObjectId(userId)}, {"$pull": {"cards": {"_id": ObjectId(cardId)}}})
+        card_found = False
+        for card in user["cards"]:
+            if card["id"] == cardId:
+                card_found = True
+                break
+        if card_found:
+            usersTable.update_one({"_id": ObjectId(userId)}, {"$pull": {"cards": {"id": ObjectId(cardId)}}})
             updated_user = usersTable.find_one({"_id": ObjectId(userId)})
             return userEntity(updated_user)
         else:
