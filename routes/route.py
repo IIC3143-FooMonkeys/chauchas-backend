@@ -24,7 +24,13 @@ async def read_category(id: str):
         return categoryEntity(categories)
     raise HTTPException(status_code=404, detail=f"Category with id {id} not found")
 
-# TO-DO POST
+@router.post("/categories", response_model=Category, status_code=status.HTTP_201_CREATED)
+async def create_category(category: Category):
+    category_dict = category.model_dump()
+    category_dict['_id'] = ObjectId()
+    category_dict['id'] = ObjectId()
+    categoriesTable.insert_one(categoryEntity(category_dict))
+    return categoryEntity(category_dict)
 
 @router.put("/categories/{id}", response_model=Category)
 async def update_category(id: str, category: Category):
