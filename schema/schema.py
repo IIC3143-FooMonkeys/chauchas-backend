@@ -1,4 +1,4 @@
-from config.database import banksTable, categoriesTable
+from config.database import banksTable, categoriesTable, cardsTable
 from bson import ObjectId
 
 def categoryEntity(category) -> dict:
@@ -10,6 +10,7 @@ def categoryEntity(category) -> dict:
         "name": str(category["name"])
     }
 
+
 def discountEntity(discount) -> dict:
     if '_id' in discount:
         discount['id'] = str(discount['_id'])
@@ -18,6 +19,13 @@ def discountEntity(discount) -> dict:
     category = categoriesTable.find_one({"_id": ObjectId(cat)})
     if not category:
         raise ValueError(f"Category with id {cat} not found")
+
+    card_id = discount["card"]
+    card = cardsTable.find_one({"_id": ObjectId(card_id)})
+    if not card:
+        raise ValueError(f"Card with id {card_id} not found")
+    card_data = cardEntity(card)
+
     return {
         "id": discount["id"],
         "url": str(discount["url"]),
@@ -27,9 +35,8 @@ def discountEntity(discount) -> dict:
         "category": str(discount["category"]),
         "expiration": discount["expiration"],
         "days": str(discount["days"]),
-        "card": str(discount["card"])
+        "card": card_data
     }
-
 def bankEntity(bank) -> dict:
     if '_id' in bank:
         bank['id'] = str(bank['_id'])

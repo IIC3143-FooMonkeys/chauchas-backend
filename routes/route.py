@@ -63,17 +63,16 @@ async def get_discounts(page: int = 1, count: int = 25, category: Optional[str] 
     discounts = list(discountsTable.find(query).skip(offset).limit(count))
     return discountEntities(discounts)
 
-@router.post("/discounts", response_model=Discount, status_code=status.HTTP_201_CREATED)
-async def create_discount(discount: Discount):
-    category_doc = categoriesTable.find_one({"name": str(discount.category)})
-    if category_doc is None:
-        raise HTTPException(status_code=400, detail="Invalid category")
-    discount_dict = discount.model_dump()
-    discount_dict['category'] = str(category_doc["_id"])
-    discount_dict['_id'] = ObjectId()
-    discount_dict['id'] = ObjectId()
-    new_discount = discountsTable.insert_one(discountEntity(discount_dict))
-    return discountEntity(discount_dict)
+@router.get("/discounts", response_model=List[Discount])
+async def get_discounts(page: int = 1, count: int = 25, category: Optional[str] = None):
+    offset = (page - 1) * count
+    query = {}
+    if category:
+        query["category"] = category
+
+    discounts = list(discountsTable.find(query).skip(offset).limit(count))
+    return discountEntities(discounts)
+
 
 @router.get("/discounts/{id}", response_model=Discount)
 async def read_discount(id: str):
