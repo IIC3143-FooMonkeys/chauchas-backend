@@ -149,6 +149,23 @@ async def get_cards_by_bank(bankId: str, page: int = 1, count: int = 25):
         raise HTTPException(status_code=404, detail=f"No cards found for the bank {bankId}")
     return cardEntities(cards)
 
+# TO-DO POST
+
+@router.put("/cards/{id}", response_model=Card)
+async def update_card(id: str, card: Card):
+    if cardsTable.find_one({"_id": ObjectId(id)}) is not None:
+        cardsTable.update_one({"_id": ObjectId(id)}, {"$set": cardEntity(card)})
+        updated_card = cardsTable.find_one({"_id": ObjectId(id)})
+        return cardEntity(updated_card)
+    raise HTTPException(status_code=404, detail=f"Card with id {id} not found")
+
+@router.delete("/cards/{id}", response_model=Card)
+async def delete_card(id: str):
+    if (card := cardsTable.find_one({"_id": ObjectId(id)})) is not None:
+        cardsTable.delete_one({"_id": ObjectId(id)})
+        return cardEntity(card)
+    raise HTTPException(status_code=404, detail=f"Card with id {id} not found")
+
 # ROUTES FOR USERS #
 
 @router.get("/users", response_model=List[Card])
@@ -170,3 +187,11 @@ async def read_user(id: str):
     if (user := usersTable.find_one({"_id": ObjectId(id)})) is not None:
         return userEntity(user)
     raise HTTPException(status_code=404, detail=f"User with id {id} has no cards yet")
+
+@router.put("/users/{id}", response_model=User)
+async def update_user(id: str, user: User):
+    if usersTable.find_one({"_id": ObjectId(id)}) is not None:
+        usersTable.update_one({"_id": ObjectId(id)}, {"$set": userEntity(user)})
+        updated_user = usersTable.find_one({"_id": ObjectId(id)})
+        return userEntity(updated_user)
+    raise HTTPException(status_code=404, detail=f"User with id {id} not found")
