@@ -35,7 +35,7 @@ async def create_category(category: Category):
 @router.put("/categories/{id}", response_model=Category)
 async def update_category(id: str, category: Category):
     if categoriesTable.find_one({"_id": ObjectId(id)}) is not None:
-        categoriesTable.update_one({"_id": ObjectId(id)}, {"$set": categoryEntity(category)})
+        categoriesTable.update_one({"_id": ObjectId(id)}, {"$set": category.model_dump()})
         updated_category = categoriesTable.find_one({"_id": ObjectId(id)})
         return categoryEntity(updated_category)
     raise HTTPException(status_code=404, detail=f"Category with id {id} not found")
