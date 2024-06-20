@@ -7,7 +7,6 @@ from routes.banks import router as banks_router
 from routes.cards import router as cards_router
 from routes.users import router as users_router
 import uvicorn
-from test_database.insertions import insert_tests
 
 app = FastAPI()
 
