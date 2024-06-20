@@ -53,7 +53,8 @@ def cardEntity(card) -> dict:
         "id": card["id"],
         "bankId": bank_data["id"],
         "cardType": str(card["cardType"]),
-        "bankName": bank_data["name"]
+        "bankName": bank_data["name"],
+        "paymentMethod": str(card["paymentMethod"])
     }
 
 def userEntity(user) -> dict:
