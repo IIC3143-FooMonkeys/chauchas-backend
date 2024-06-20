@@ -7,7 +7,7 @@ def categoryEntity(category) -> dict:
         del category['_id']
     return {
         "id": category["id"],
-        "categoryName": str(category["categoryName"])
+        "name": str(category["name"])
     }
 
 def discountEntity(discount) -> dict:

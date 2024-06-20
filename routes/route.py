@@ -59,7 +59,7 @@ async def get_discounts(page: int = 1, count: int = 25, category: Optional[str] 
 
 @router.post("/discounts", response_model=Discount, status_code=status.HTTP_201_CREATED)
 async def create_discount(discount: Discount):
-    category_doc = categoriesTable.find_one({"categoryName": str(discount.category)})
+    category_doc = categoriesTable.find_one({"name": str(discount.category)})
     if category_doc is None:
         raise HTTPException(status_code=400, detail="Invalid category")
     discount_dict = discount.dict()
@@ -180,7 +180,12 @@ async def get_users(page: int = 1, count: int = 25):
 async def read_user(id: str):
     if (users := usersTable.find_one({"_id": ObjectId(id)})) is not None:
         return userEntity(users)
-    raise HTTPException(status_code=404, detail=f"User with id {id} not found")
+    else:
+        data = {
+            "userId": id,
+            "cards": []
+        }
+        usersTable.insert_one(userEntity(data))
 
 # TO-DO POST
 
