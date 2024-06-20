@@ -20,6 +20,7 @@ class Card(BaseModel):
     bankId: str
     cardType: str
     bankName: str
+    paymentMethod: str
 
 class Category(BaseModel):
     id: str
