@@ -1,4 +1,4 @@
-from routes.route import router
+from routes.main import router
 from routes.categories import router as categories_router
 from routes.discounts import router as discounts_router
 from routes.banks import router as banks_router
