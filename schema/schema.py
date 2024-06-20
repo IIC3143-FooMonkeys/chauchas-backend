@@ -14,6 +14,10 @@ def discountEntity(discount) -> dict:
     if '_id' in discount:
         discount['id'] = str(discount['_id'])
         del discount['_id']
+    cat = discount["category"]
+    category = categoriesTable.find_one({"_id": ObjectId(cat)})
+    if not category:
+        raise ValueError(f"Category with id {cat} not found")
     return {
         "id": discount["id"],
         "url": str(discount["url"]),

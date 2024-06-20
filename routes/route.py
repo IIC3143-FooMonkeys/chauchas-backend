@@ -33,7 +33,6 @@ async def create_discount(discount: Discount):
     discount_dict['_id'] = ObjectId()
     discount_dict['id'] = ObjectId()
     new_discount = discountsTable.insert_one(discountEntity(discount_dict))
-    created_discount = discountsTable.find_one({"_id": new_discount.inserted_id})
     return discountEntity(discount_dict)
 
 @router.get("/discounts/{id}", response_model=Discount)
