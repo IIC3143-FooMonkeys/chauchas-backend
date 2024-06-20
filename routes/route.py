@@ -174,7 +174,7 @@ async def delete_card(id: str):
 
 # ROUTES FOR USERS #
 
-@router.get("/users", response_model=List[Card])
+@router.get("/users", response_model=List[User])
 async def get_users(page: int = 1, count: int = 25):
     offset = (page - 1) * count
     query = {}
@@ -189,6 +189,7 @@ async def read_user(id: str):
     else:
         data = {
             "userId": id,
+            "auth0Id": "",
             "cards": []
         }
         usersTable.insert_one(userEntity(data))
