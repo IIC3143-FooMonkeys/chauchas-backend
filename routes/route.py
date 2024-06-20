@@ -22,11 +22,12 @@ async def get_discounts(page: int = 1, count: int = 25, category: Optional[str] 
     return discountEntities(discounts)
 
 
+
 @router.post("/discounts", response_model=Discount, status_code=status.HTTP_201_CREATED)
 async def create_discount(discount: Discount):
     # Convertir Discount a diccionario
     discount_dict = discount.dict(by_alias=True)
-
+    discount_dict["id"] = ObjectId()
     # Buscar el ID de la categoría en la base de datos
     category_doc = categoriesTable.find_one({"categoryName": discount.category})
     if category_doc is None:
@@ -40,8 +41,6 @@ async def create_discount(discount: Discount):
 
     if created_discount is None:
         raise HTTPException(status_code=404, detail="Discount not found")
-
-    return discountEntity(created_discount)
 
 @router.get("/discounts/{id}", response_model=Discount)
 async def read_discount(id: str):
