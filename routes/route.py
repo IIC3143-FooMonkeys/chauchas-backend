@@ -37,7 +37,7 @@ async def update_discount(id: str, discount: Discount):
 
 @router.delete("/discounts/{id}", response_model=Discount)
 async def delete_discount(id: str):
-    if (discount := discountsTable.find_one({"id": ObjectId(id)})) is not None:
-        discountsTable.delete_one({"id": ObjectId(id)})
+    if (discount := discountsTable.find_one({"_id": ObjectId(id)})) is not None:
+        discountsTable.delete_one({"_id": ObjectId(id)})
         return discountEntity(discount)
     raise HTTPException(status_code=404, detail=f"Discount with id {id} not found")
