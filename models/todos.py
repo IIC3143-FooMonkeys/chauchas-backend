@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 import datetime as d
 class Discount(BaseModel): #Modificar en base al E-R
+    id: str
     url: str
     local: str
     discount: int
