@@ -23,9 +23,12 @@ async def get_discounts(
         query["category"] = category
 
     discounts = list(discountsTable.find(query).skip(offset).limit(count))
+
     filtered_discounts = []
     for discount in discounts:
         card_id = discount.get("card")
+        if isinstance(card_id, dict):
+            card_id = card_id.get("id")
         card = cardsTable.find_one({"_id": ObjectId(card_id)})
         if card:
             if cardType and card.get("cardType") != cardType:
