@@ -1,6 +1,7 @@
 def discountEntity(discount) -> dict:
-    discount['id'] = str(discount['_id'])
-    del discount['_id']
+    if '_id' in discount:
+        discount['id'] = str(discount['_id'])
+        del discount['_id']
     return {
         "id": discount["id"],
         "url": str(discount["url"]),
