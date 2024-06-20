@@ -213,8 +213,6 @@ async def read_user(id: str):
 @router.post("/users", response_model=User, status_code=status.HTTP_201_CREATED)
 async def create_user(user: User):
     user_dict = user.model_dump()
-    user_dict['_id'] = user.auth0Id
-    user_dict['id'] = user.auth0Id
     usersTable.insert_one(userEntity(user_dict))
     return userEntity(user_dict)
 
