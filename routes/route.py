@@ -131,13 +131,8 @@ async def read_user(id: str):
         return userEntity(users)
     raise HTTPException(status_code=404, detail=f"User with id {id} not found")
 
-@router.get("/users/{id}/cards", response_model=List[Card])
-async def get_cards_by_user(id: str, page: int = 1, count: int = 25):
-    offset = (page - 1) * count
-    user = usersTable.find_one({"_id": ObjectId(id)})
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    cards = user.get("cards", [])
-    formatted_cards = [cardEntity(card) for card in cards]
-    return formatted_cards[offset:offset+count]
+@router.get("/users/{id}/cards", response_model=User)
+async def read_user(id: str):
+    if (user := usersTable.find_one({"_id": ObjectId(id)})) is not None:
+        return userEntity(user)
+    raise HTTPException(status_code=404, detail=f"User with id {id} has no cards yet")

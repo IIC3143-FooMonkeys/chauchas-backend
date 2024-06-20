@@ -17,7 +17,7 @@ class Bank(BaseModel):
 class Card(BaseModel):
     bankId: str
     cardType: str
-    bank: str
+    bankName: str
 
 class Category(BaseModel):
     categoryName: str

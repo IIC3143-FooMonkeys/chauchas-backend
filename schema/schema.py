@@ -64,7 +64,6 @@ def userEntity(user) -> dict:
 
     return {
         "id": user["id"],
-        "email": str(user["email"]),
         "cards": formatted_cards
     }
 
