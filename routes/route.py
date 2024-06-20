@@ -21,6 +21,12 @@ async def get_discounts(page: int = 1, count: int = 25, category: Optional[str] 
     discounts = list(discountsTable.find(query).skip(offset).limit(count))
     return discountEntities(discounts)
 
+@router.post("/discounts", response_model=Discount, status_code=status.HTTP_201_CREATED)
+async def create_discount(discount: Discount):
+    new_discount = discountsTable.insert_one(discountEntity(discount))
+    created_discount = discountsTable.find_one({"_id": new_discount.inserted_id})
+    return discountEntity(created_discount)
+
 @router.get("/discounts/{id}", response_model=Discount)
 async def read_discount(id: str):
     if (discount := discountsTable.find_one({"_id": ObjectId(id)})) is not None:
