@@ -31,7 +31,7 @@ def bankEntity(bank) -> dict:
         del bank['_id']
     return {
         "id": bank["id"],
-        "bankName": str(bank["bankName"])
+        "name": str(bank["name"])
     }
 
 def cardEntity(card) -> dict:
@@ -48,7 +48,20 @@ def cardEntity(card) -> dict:
         "id": card["id"],
         "bankId": bank_data["id"],
         "cardType": str(card["cardType"]),
-        "bankName": bank_data["bankName"]
+        "bankName": bank_data["name"]
+    }
+
+def userEntity(user) -> dict:
+    if '_id' in user:
+        user['id'] = str(user['_id'])
+        del user['_id']
+
+    formatted_cards = [cardEntity(card) for card in user["cards"]]
+
+    return {
+        "id": user["id"],
+        "email": str(user["email"]),
+        "cards": formatted_cards
     }
 
 def discountEntities(entity) -> list:
