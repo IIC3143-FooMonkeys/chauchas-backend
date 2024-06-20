@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List
 from models.discounts import Discount
 from schema.schema import discountEntity, discountEntities
-from config.database import discountsTable, cardsTable
+from config.database import discountsTable
 from bson import ObjectId
 
 router = APIRouter()
@@ -24,20 +24,24 @@ async def get_discounts(
 
     discounts = list(discountsTable.find(query).skip(offset).limit(count))
 
+    # Filtrar por cardType y bankName
     filtered_discounts = []
     for discount in discounts:
         card_id = discount.get("card")
         if isinstance(card_id, dict):
             card_id = card_id.get("id")
-        card = cardsTable.find_one({"_id": ObjectId(card_id)})
+        if not isinstance(card_id, ObjectId):
+            card_id = ObjectId(card_id)
+        card = cardsTable.find_one({"_id": card_id})
         if card:
             if cardType and card.get("cardType") != cardType:
                 continue
             if bankName and card.get("bankName") != bankName:
                 continue
-            discount["card"] = card
+            discount["card"] = card  # Añadir los detalles de la tarjeta al descuento
             filtered_discounts.append(discount)
         else:
+            # Manejar el caso donde la tarjeta no se encuentra
             print(f"Card with id {card_id} not found")
 
     return discountEntities(filtered_discounts)
