@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from typing import List
-from models.cards import Card
+from models.discounts import Card
 from schema.schema import cardEntity, cardEntities
 from config.database import banksTable, cardsTable
 from bson import ObjectId

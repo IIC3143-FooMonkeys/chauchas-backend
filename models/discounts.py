@@ -1,6 +1,12 @@
 from pydantic import BaseModel
-from cards import Card
 import datetime as d
+
+class Card(BaseModel):
+    id: str
+    bankId: str
+    cardType: str
+    bankName: str
+    paymentMethod: str
 
 class Discount(BaseModel):
     id: str
