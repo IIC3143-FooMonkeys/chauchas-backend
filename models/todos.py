@@ -27,5 +27,5 @@ class Category(BaseModel):
 
 class User(BaseModel):
     id: str
-    userId: str
+    auth0Id: str
     cards: list
