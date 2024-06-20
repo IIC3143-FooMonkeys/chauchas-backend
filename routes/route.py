@@ -160,7 +160,7 @@ async def get_cards_by_bank(bankId: str, page: int = 1, count: int = 25):
 @router.put("/cards/{id}", response_model=Card)
 async def update_card(id: str, card: Card):
     if cardsTable.find_one({"_id": ObjectId(id)}) is not None:
-        cardsTable.update_one({"_id": ObjectId(id)}, {"$set": cardEntity(card)})
+        cardsTable.update_one({"_id": ObjectId(id)}, {"$set": card.model_dump()})
         updated_card = cardsTable.find_one({"_id": ObjectId(id)})
         return cardEntity(updated_card)
     raise HTTPException(status_code=404, detail=f"Card with id {id} not found")
