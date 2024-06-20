@@ -17,4 +17,6 @@ class Discount(BaseModel):
     category: str
     expiration: d.datetime
     days: str
-    card: Card
+    card: str
+    cardType: str
+    bankName: str
