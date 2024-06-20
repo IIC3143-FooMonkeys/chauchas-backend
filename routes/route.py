@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from typing import Optional, List
-from models.todos import Discount, Bank, Card, Category
+from models.todos import Discount, Bank, Card, Category, User
 from schema.schema import discountEntity, discountEntities,cardEntity, \
     cardEntities,bankEntity, bankEntities,userEntity, userEntities, categoryEntity, categoryEntities
 from config.database import discountsTable,categoriesTable,banksTable,cardsTable,categoriesTable,usersTable
@@ -17,6 +17,12 @@ async def get_categories(page: int = 1, count: int = 25):
 
     categories = list(categoriesTable.find(query).skip(offset).limit(count))
     return categoryEntities(categories)
+
+@router.get("/categories/{id}", response_model=Category)
+async def read_category(id: str):
+    if (categories := categoriesTable.find_one({"_id": ObjectId(id)})) is not None:
+        return categoryEntity(categories)
+    raise HTTPException(status_code=404, detail=f"Category with id {id} not found")
 
 # ROUTES FOR DISCOUNTS #
 
@@ -77,6 +83,12 @@ async def get_banks(page: int = 1, count: int = 25):
     banks = list(banksTable.find(query).skip(offset).limit(count))
     return bankEntities(banks)
 
+@router.get("/banks/{id}", response_model=Bank)
+async def read_bank(id: str):
+    if (banks := banksTable.find_one({"_id": ObjectId(id)})) is not None:
+        return bankEntity(banks)
+    raise HTTPException(status_code=404, detail=f"Bank with id {id} not found")
+
 # ROUTES FOR CARDS #
 
 @router.get("/cards", response_model=List[Card])
@@ -85,7 +97,13 @@ async def get_cards(page: int = 1, count: int = 25):
     query = {}
 
     cards = list(cardsTable.find(query).skip(offset).limit(count))
-    return bankEntities(cards)
+    return cardEntities(cards)
+
+@router.get("/cards/{id}", response_model=Card)
+async def read_card(id: str):
+    if (cards := cardsTable.find_one({"_id": ObjectId(id)})) is not None:
+        return cardEntity(cards)
+    raise HTTPException(status_code=404, detail=f"Card with id {id} not found")
 
 @router.get("/cards/by-bank", response_model=List[Card])
 async def get_cards_by_bank(bankId: str, page: int = 1, count: int = 25):
@@ -94,7 +112,7 @@ async def get_cards_by_bank(bankId: str, page: int = 1, count: int = 25):
 
     cards = list(cardsTable.find(query).skip(offset).limit(count))
     if not cards:
-        raise HTTPException(status_code=404, detail="No cards found for this bank")
+        raise HTTPException(status_code=404, detail=f"No cards found for the bank {bankId}")
     return cardEntities(cards)
 
 # ROUTES FOR USERS #
@@ -105,7 +123,13 @@ async def get_users(page: int = 1, count: int = 25):
     query = {}
 
     users = list(usersTable.find(query).skip(offset).limit(count))
-    return bankEntities(users)
+    return userEntities(users)
+
+@router.get("/users/{id}", response_model=User)
+async def read_user(id: str):
+    if (users := usersTable.find_one({"_id": ObjectId(id)})) is not None:
+        return userEntity(users)
+    raise HTTPException(status_code=404, detail=f"User with id {id} not found")
 
 @router.get("/users/{id}/cards", response_model=List[Card])
 async def get_cards_by_user(id: str, page: int = 1, count: int = 25):
