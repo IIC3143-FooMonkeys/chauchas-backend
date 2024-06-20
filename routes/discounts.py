@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List
 from models.discounts import Discount
 from schema.schema import discountEntity, discountEntities
-from config.database import discountsTable
+from config.database import discountsTable, cardsTable
 from bson import ObjectId
 
 router = APIRouter()
@@ -21,13 +21,23 @@ async def get_discounts(
 
     if category:
         query["category"] = category
-    if cardType:
-        query["card.cardType"] = cardType
-    if bankName:
-        query["card.bankName"] = bankName
 
     discounts = list(discountsTable.find(query).skip(offset).limit(count))
-    return discountEntities(discounts)
+    filtered_discounts = []
+    for discount in discounts:
+        card_id = discount.get("card")
+        card = cardsTable.find_one({"_id": ObjectId(card_id)})
+        if card:
+            if cardType and card.get("cardType") != cardType:
+                continue
+            if bankName and card.get("bankName") != bankName:
+                continue
+            discount["card"] = card
+            filtered_discounts.append(discount)
+        else:
+            print(f"Card with id {card_id} not found")
+
+    return discountEntities(filtered_discounts)
 
 @router.get("/discounts/{id}", response_model=Discount)
 async def read_discount(id: str):
