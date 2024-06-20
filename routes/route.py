@@ -23,7 +23,7 @@ async def get_discounts(page: int = 1, count: int = 25, category: Optional[str] 
 
 @router.get("/discounts/{id}", response_model=Discount)
 async def read_discount(id: str):
-    if (discount := discountsTable.find_one({"id": ObjectId(id)})) is not None:
+    if (discount := discountsTable.find_one({"_id": ObjectId(id)})) is not None:
         return discountEntity(discount)
     raise HTTPException(status_code=404, detail=f"Discount with id {id} not found")
 
