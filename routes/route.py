@@ -117,7 +117,7 @@ async def read_bank(id: str):
 @router.put("/banks/{id}", response_model=Bank)
 async def update_bank(id: str, bank: Bank):
     if banksTable.find_one({"_id": ObjectId(id)}) is not None:
-        banksTable.update_one({"_id": ObjectId(id)}, {"$set": bankEntity(bank)})
+        banksTable.update_one({"_id": ObjectId(id)}, {"$set": bank.model_dump()})
         updated_bank = banksTable.find_one({"_id": ObjectId(id)})
         return bankEntity(updated_bank)
     raise HTTPException(status_code=404, detail=f"Bank with id {id} not found")
