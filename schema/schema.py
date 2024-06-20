@@ -26,7 +26,8 @@ def discountEntity(discount) -> dict:
         "description": str(discount["description"]),
         "category": str(discount["category"]),
         "expiration": discount["expiration"],
-        "days": str(discount["days"])
+        "days": str(discount["days"]),
+        "card": str(discount["card"])
     }
 
 def bankEntity(bank) -> dict:

@@ -9,7 +9,7 @@ class Discount(BaseModel): #Modificar en base al E-R
     category: str
     expiration: d.datetime
     days: str
-
+    card: str
 
 class Bank(BaseModel):
     name: str
@@ -21,3 +21,7 @@ class Card(BaseModel):
 
 class Category(BaseModel):
     categoryName: str
+
+class User(BaseModel):
+    userId: str
+    cards: list
