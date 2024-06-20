@@ -9,3 +9,5 @@ mongoUrl = os.getenv("MONGO_URL")
 client = MongoClient(mongoUrl)
 db = client.foomonkeys123
 discountsTable = db["Discounts"]
+banksTable = db["Banks"]
+userCardsTable = db["Cards"]

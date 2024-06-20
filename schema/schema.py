@@ -4,11 +4,12 @@ def discountEntity(discount) -> dict:
     return {
         "id": discount["id"],
         "url": str(discount["url"]),
-        "title": str(discount["title"]),
+        "local": str(discount["local"]),
         "discount": int(discount["discount"]),
         "description": str(discount["description"]),
         "category": str(discount["category"]),
-        "expiration": discount["expiration"]
+        "expiration": discount["expiration"],
+        "days": str(discount["days"])
     }
 
 def discountEntities(entity) -> list:
