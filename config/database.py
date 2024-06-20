@@ -10,5 +10,6 @@ client = MongoClient(mongoUrl)
 db = client.foomonkeys123
 discountsTable = db["Discounts"]
 banksTable = db["Banks"]
-userCardsTable = db["Cards"]
+cardsTable = db["Cards"]
 categoriesTable = db["Categories"]
+usersTable = db["Users"]

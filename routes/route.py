@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException, status
 from typing import Optional, List
-from models.todos import Discount
-from schema.schema import discountEntity, discountEntities
-from config.database import discountsTable,categoriesTable
+from models.todos import Discount, Bank, Card, Category
+from schema.schema import discountEntity, discountEntities,cardEntity, \
+    cardEntities,bankEntity, bankEntities,userEntity, userEntities, categoryEntity, categoryEntities
+from config.database import discountsTable,categoriesTable,banksTable,cardsTable,categoriesTable,usersTable
 from bson import ObjectId
 
 router = APIRouter()
@@ -55,3 +56,12 @@ async def delete_discount(id: str):
         discountsTable.delete_one({"_id": ObjectId(id)})
         return discountEntity(discount)
     raise HTTPException(status_code=404, detail=f"Discount with id {id} not found")
+
+
+@router.get("/categories", response_model=List[Category])
+async def get_categories(page: int = 1, count: int = 25):
+    offset = (page - 1) * count
+    query = {}
+
+    categories = list(categoriesTable.find(query).skip(offset).limit(count))
+    return categoryEntities(categories)
