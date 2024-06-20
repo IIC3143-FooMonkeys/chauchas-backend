@@ -11,3 +11,4 @@ db = client.foomonkeys123
 discountsTable = db["Discounts"]
 banksTable = db["Banks"]
 userCardsTable = db["Cards"]
+categoriesTable = db["Categories"]
