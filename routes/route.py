@@ -182,6 +182,8 @@ async def read_user(id: str):
         return userEntity(users)
     raise HTTPException(status_code=404, detail=f"User with id {id} not found")
 
+# TO-DO POST
+
 @router.get("/users/{id}/cards", response_model=User)
 async def read_user(id: str):
     if (user := usersTable.find_one({"_id": ObjectId(id)})) is not None:
