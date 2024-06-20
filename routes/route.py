@@ -220,8 +220,7 @@ async def update_user(id: str, user: User):
 async def add_card_to_user(userId: str, cardId: str):
     if (user := usersTable.find_one({"_id": ObjectId(userId)})) is not None:
         if (card := cardsTable.find_one({"_id": ObjectId(cardId)})) is not None:
-            card = cardEntity(card)
-            usersTable.update_one({"_id": userId}, {"$addToSet": {"cards": card}})
+            usersTable.update_one({"_id": ObjectId(userId)}, {"$addToSet": {"cards": card}})
             updated_user = usersTable.find_one({"_id": ObjectId(userId)})
             return userEntity(updated_user)
         else:
