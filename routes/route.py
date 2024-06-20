@@ -68,7 +68,7 @@ async def create_discount(discount: Discount):
     category_doc = categoriesTable.find_one({"name": str(discount.category)})
     if category_doc is None:
         raise HTTPException(status_code=400, detail="Invalid category")
-    discount_dict = discount.dict()
+    discount_dict = discount.model_dump()
     discount_dict['category'] = str(category_doc["_id"])
     discount_dict['_id'] = ObjectId()
     discount_dict['id'] = ObjectId()
@@ -161,7 +161,17 @@ async def get_cards_by_bank(bankId: str, page: int = 1, count: int = 25):
         raise HTTPException(status_code=404, detail=f"No cards found for the bank {bankId}")
     return cardEntities(cards)
 
-# TO-DO POST
+@router.post("/cards", response_model=Card, status_code=status.HTTP_201_CREATED)
+async def create_card(card: Card):
+    bank_doc = banksTable.find_one({"name": str(card.bankName)})
+    if bank_doc is None:
+        raise HTTPException(status_code=400, detail="Invalid bank")
+    card_dict = card.model_dump()
+    card_dict['bankId'] = str(bank_doc["_id"])
+    card_dict['_id'] = ObjectId()
+    card_dict['id'] = ObjectId()
+    cardsTable.insert_one(cardEntity(card_dict))
+    return cardEntity(card_dict)
 
 @router.put("/cards/{id}", response_model=Card)
 async def update_card(id: str, card: Card):
