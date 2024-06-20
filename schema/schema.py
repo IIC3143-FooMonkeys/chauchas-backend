@@ -20,9 +20,11 @@ def discountEntity(discount) -> dict:
     if not category:
         raise ValueError(f"Category with id {cat} not found")
 
-    card_data = discount["card"]
-    if not card_data:
-        raise ValueError(f"Card data not found for discount {discount['id']}")
+    card_id = discount["card"]
+    card = cardsTable.find_one({"_id": ObjectId(card_id)})
+    if not card:
+        raise ValueError(f"Card with id {card_id} not found")
+    card_data = cardEntity(card)
 
     return {
         "id": discount["id"],
@@ -35,7 +37,6 @@ def discountEntity(discount) -> dict:
         "days": str(discount["days"]),
         "card": card_data
     }
-
 def bankEntity(bank) -> dict:
     if '_id' in bank:
         bank['id'] = str(bank['_id'])
