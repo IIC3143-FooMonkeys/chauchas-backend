@@ -237,7 +237,7 @@ async def add_card_to_user(userId: str, cardId: str):
                 card_found = True
                 break
         if card_found:
-            usersTable.update_one({"_id": ObjectId(userId)}, {"$pull": {"cards": {"id": ObjectId(cardId)}}})
+            usersTable.update_one({"_id": ObjectId(userId)}, {"$pull": {"cards": {"_id": ObjectId(cardId)}}})
             updated_user = usersTable.find_one({"_id": ObjectId(userId)})
             return userEntity(updated_user)
         else:
