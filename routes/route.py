@@ -234,6 +234,7 @@ async def add_card_to_user(userId: str, cardId: str):
         card_found = False
         for card in user["cards"]:
             if card["_id"] == cardId:
+                print(card["_id"])
                 card_found = True
                 break
         if card_found:
