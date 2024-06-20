@@ -8,6 +8,16 @@ from bson import ObjectId
 
 router = APIRouter()
 
+# ROUTES FOR CATEGORIES #
+
+@router.get("/categories", response_model=List[Category])
+async def get_categories(page: int = 1, count: int = 25):
+    offset = (page - 1) * count
+    query = {}
+
+    categories = list(categoriesTable.find(query).skip(offset).limit(count))
+    return categoryEntities(categories)
+
 # ROUTES FOR DISCOUNTS #
 
 @router.get("/")
@@ -57,11 +67,53 @@ async def delete_discount(id: str):
         return discountEntity(discount)
     raise HTTPException(status_code=404, detail=f"Discount with id {id} not found")
 
+# ROUTES FOR BANKS #
 
-@router.get("/categories", response_model=List[Category])
-async def get_categories(page: int = 1, count: int = 25):
+@router.get("/banks", response_model=List[Bank])
+async def get_banks(page: int = 1, count: int = 25):
     offset = (page - 1) * count
     query = {}
 
-    categories = list(categoriesTable.find(query).skip(offset).limit(count))
-    return categoryEntities(categories)
+    banks = list(banksTable.find(query).skip(offset).limit(count))
+    return bankEntities(banks)
+
+# ROUTES FOR CARDS #
+
+@router.get("/cards", response_model=List[Card])
+async def get_cards(page: int = 1, count: int = 25):
+    offset = (page - 1) * count
+    query = {}
+
+    cards = list(cardsTable.find(query).skip(offset).limit(count))
+    return bankEntities(cards)
+
+@router.get("/cards/by-bank", response_model=List[Card])
+async def get_cards_by_bank(bankId: str, page: int = 1, count: int = 25):
+    offset = (page - 1) * count
+    query = {"bankId": ObjectId(bankId)}
+
+    cards = list(cardsTable.find(query).skip(offset).limit(count))
+    if not cards:
+        raise HTTPException(status_code=404, detail="No cards found for this bank")
+    return cardEntities(cards)
+
+# ROUTES FOR USERS #
+
+@router.get("/users", response_model=List[Card])
+async def get_users(page: int = 1, count: int = 25):
+    offset = (page - 1) * count
+    query = {}
+
+    users = list(usersTable.find(query).skip(offset).limit(count))
+    return bankEntities(users)
+
+@router.get("/users/{id}/cards", response_model=List[Card])
+async def get_cards_by_user(id: str, page: int = 1, count: int = 25):
+    offset = (page - 1) * count
+    user = usersTable.find_one({"_id": ObjectId(id)})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    cards = user.get("cards", [])
+    formatted_cards = [cardEntity(card) for card in cards]
+    return formatted_cards[offset:offset+count]
