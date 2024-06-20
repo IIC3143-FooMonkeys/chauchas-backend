@@ -12,16 +12,20 @@ class Discount(BaseModel): #Modificar en base al E-R
     card: str
 
 class Bank(BaseModel):
+    id: str
     name: str
 
 class Card(BaseModel):
+    id: str
     bankId: str
     cardType: str
     bankName: str
 
 class Category(BaseModel):
+    id: str
     name: str
 
 class User(BaseModel):
+    id: str
     userId: str
     cards: list
