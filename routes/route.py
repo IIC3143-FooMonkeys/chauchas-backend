@@ -112,7 +112,13 @@ async def read_bank(id: str):
         return bankEntity(banks)
     raise HTTPException(status_code=404, detail=f"Bank with id {id} not found")
 
-# TO-DO POST
+@router.post("/banks", response_model=Bank, status_code=status.HTTP_201_CREATED)
+async def create_bank(bank: Bank):
+    bank_dict = bank.model_dump()
+    bank_dict['_id'] = ObjectId()
+    bank_dict['id'] = ObjectId()
+    banksTable.insert_one(bankEntity(bank_dict))
+    return bankEntity(bank_dict)
 
 @router.put("/banks/{id}", response_model=Bank)
 async def update_bank(id: str, bank: Bank):
