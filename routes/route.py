@@ -84,7 +84,7 @@ async def read_discount(id: str):
 @router.put("/discounts/{id}", response_model=Discount)
 async def update_discount(id: str, discount: Discount):
     if discountsTable.find_one({"_id": ObjectId(id)}) is not None:
-        discountsTable.update_one({"_id": ObjectId(id)}, {"$set": discountEntity(discount)})
+        discountsTable.update_one({"_id": ObjectId(id)}, {"$set": discount.model_dump()})
         updated_discount = discountsTable.find_one({"_id": ObjectId(id)})
         return discountEntity(updated_discount)
     raise HTTPException(status_code=404, detail=f"Discount with id {id} not found")
