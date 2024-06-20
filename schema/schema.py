@@ -70,3 +70,15 @@ def userEntity(user) -> dict:
 
 def discountEntities(entity) -> list:
     return[discountEntity(discount) for discount in entity]
+
+def bankEntities(entity) -> list:
+    return[bankEntity(bank) for bank in entity]
+
+def cardEntities(entity) -> list:
+    return[cardEntity(card) for card in entity]
+
+def userEntities(entity) -> list:
+    return[userEntity(user) for user in entity]
+
+def categoryEntities(entity) -> list:
+    return[categoryEntity(category) for category in entity]
