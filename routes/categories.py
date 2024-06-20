@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from typing import List
-from models.todos import Category
+from models.categories import Category
 from schema.schema import categoryEntity, categoryEntities
 from config.database import categoriesTable, categoriesTable
 from bson import ObjectId

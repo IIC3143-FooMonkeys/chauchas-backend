@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query
 from typing import Optional, List
-from models.todos import Discount
+from models.discounts import Discount
 from schema.schema import discountEntity, discountEntities
 from config.database import discountsTable
 from bson import ObjectId
@@ -22,6 +22,7 @@ async def get_discounts(
 
     discounts = list(discountsTable.find(query).skip(offset).limit(count))
     return discountEntities(discounts)
+
 @router.get("/discounts/{id}", response_model=Discount)
 async def read_discount(id: str):
     if (discount := discountsTable.find_one({"_id": ObjectId(id)})) is not None:

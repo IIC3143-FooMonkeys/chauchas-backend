@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 from typing import List
-from models.todos import User
+from models.users import User
 from schema.schema import userEntity, userEntities
 from config.database import cardsTable, usersTable
 from bson import ObjectId
