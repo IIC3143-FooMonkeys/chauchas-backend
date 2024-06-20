@@ -13,18 +13,18 @@ async def get_discounts(
         page: int = 1,
         count: int = 25,
         category: Optional[str] = Query(None, description="Category ID to filter discounts"),
-        card_type: Optional[str] = Query(None, description="Card Type to filter discounts"),
-        bank_name: Optional[str] = Query(None, description="Bank Name to filter discounts")
+        cardType: Optional[str] = Query(None, description="Card Type to filter discounts"),
+        bankName: Optional[str] = Query(None, description="Bank Name to filter discounts")
 ):
     offset = (page - 1) * count
     query = {}
 
     if category:
         query["category"] = category
-    if card_type:
-        query["card.cardType"] = card_type
-    if bank_name:
-        query["card.bankName"] = bank_name
+    if cardType:
+        query["card.cardType"] = cardType
+    if bankName:
+        query["card.bankName"] = bankName
 
     discounts = list(discountsTable.find(query).skip(offset).limit(count))
     return discountEntities(discounts)
