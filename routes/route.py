@@ -233,7 +233,7 @@ async def add_card_to_user(userId: str, cardId: str):
     if (user := usersTable.find_one({"_id": ObjectId(userId)})) is not None:
         card_found = False
         for card in user["cards"]:
-            if card["id"] == cardId:
+            if card["_id"] == cardId:
                 card_found = True
                 break
         if card_found:
