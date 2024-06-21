@@ -2,16 +2,17 @@ import pytest
 from httpx import AsyncClient
 from main import app 
 
+URL = "https://www.bozitoapi.online/"
 @pytest.mark.asyncio
 async def test_get_banks():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         response = await ac.get("/banks")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 @pytest.mark.asyncio
 async def test_read_bank():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un banco primero para obtener su id
         bank_data = {"name": "Test Bank"}
         create_response = await ac.post("/banks", json=bank_data)
@@ -24,7 +25,7 @@ async def test_read_bank():
 
 @pytest.mark.asyncio
 async def test_create_bank():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         bank_data = {"name": "Test Bank"}
         response = await ac.post("/banks", json=bank_data)
     assert response.status_code == 201
@@ -32,7 +33,7 @@ async def test_create_bank():
 
 @pytest.mark.asyncio
 async def test_update_bank():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un banco primero para obtener su id
         bank_data = {"name": "Test Bank"}
         create_response = await ac.post("/banks", json=bank_data)
@@ -46,7 +47,7 @@ async def test_update_bank():
 
 @pytest.mark.asyncio
 async def test_delete_bank():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un banco primero para obtener su id
         bank_data = {"name": "Test Bank"}
         create_response = await ac.post("/banks", json=bank_data)
@@ -58,14 +59,14 @@ async def test_delete_bank():
 
 @pytest.mark.asyncio
 async def test_get_cards():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         response = await ac.get("/cards")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 @pytest.mark.asyncio
 async def test_read_card():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea una tarjeta primero para obtener su id
         card_data = {"bankId": "123", "cardType": "Credit", "bankName": "Test Bank", "paymentMethod": "Visa"}
         create_response = await ac.post("/cards", json=card_data)
@@ -78,7 +79,7 @@ async def test_read_card():
 
 @pytest.mark.asyncio
 async def test_create_card():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         card_data = {"bankId": "123", "cardType": "Credit", "bankName": "Test Bank", "paymentMethod": "Visa"}
         response = await ac.post("/cards", json=card_data)
     assert response.status_code == 201
@@ -86,7 +87,7 @@ async def test_create_card():
 
 @pytest.mark.asyncio
 async def test_update_card():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea una tarjeta primero para obtener su id
         card_data = {"bankId": "123", "cardType": "Credit", "bankName": "Test Bank", "paymentMethod": "Visa"}
         create_response = await ac.post("/cards", json=card_data)
@@ -100,7 +101,7 @@ async def test_update_card():
 
 @pytest.mark.asyncio
 async def test_delete_card():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea una tarjeta primero para obtener su id
         card_data = {"bankId": "123", "cardType": "Credit", "bankName": "Test Bank", "paymentMethod": "Visa"}
         create_response = await ac.post("/cards", json=card_data)
@@ -112,14 +113,14 @@ async def test_delete_card():
 
 @pytest.mark.asyncio
 async def test_get_categories():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         response = await ac.get("/categories")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 @pytest.mark.asyncio
 async def test_read_category():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea una categoría primero para obtener su id
         category_data = {"name": "Test Category"}
         create_response = await ac.post("/categories", json=category_data)
@@ -132,7 +133,7 @@ async def test_read_category():
 
 @pytest.mark.asyncio
 async def test_create_category():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         category_data = {"name": "Test Category"}
         response = await ac.post("/categories", json=category_data)
     assert response.status_code == 201
@@ -140,7 +141,7 @@ async def test_create_category():
 
 @pytest.mark.asyncio
 async def test_update_category():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea una categoría primero para obtener su id
         category_data = {"name": "Test Category"}
         create_response = await ac.post("/categories", json=category_data)
@@ -154,7 +155,7 @@ async def test_update_category():
 
 @pytest.mark.asyncio
 async def test_delete_category():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea una categoría primero para obtener su id
         category_data = {"name": "Test Category"}
         create_response = await ac.post("/categories", json=category_data)
@@ -166,14 +167,14 @@ async def test_delete_category():
 
 @pytest.mark.asyncio
 async def test_get_discounts():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         response = await ac.get("/discounts")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 @pytest.mark.asyncio
 async def test_read_discount():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un descuento primero para obtener su id
         discount_data = {
             "url": "http://test.com",
@@ -184,8 +185,8 @@ async def test_read_discount():
             "expiration": "2024-12-31T00:00:00",
             "days": "Monday",
             "card": "Test Card",
-            "cardType": "Credit",
-            "paymentType": "Online",
+            "cardType": "Gold",
+            "paymentType": "Credito",
             "bankName": "Test Bank"
         }
         create_response = await ac.post("/discounts", json=discount_data)
@@ -198,7 +199,7 @@ async def test_read_discount():
 
 @pytest.mark.asyncio
 async def test_update_discount():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un descuento primero para obtener su id
         discount_data = {
             "url": "http://test.com",
@@ -209,8 +210,8 @@ async def test_update_discount():
             "expiration": "2024-12-31T00:00:00",
             "days": "Monday",
             "card": "Test Card",
-            "cardType": "Credit",
-            "paymentType": "Online",
+            "cardType": "Gold",
+            "paymentType": "Credito",
             "bankName": "Test Bank"
         }
         create_response = await ac.post("/discounts", json=discount_data)
@@ -226,8 +227,8 @@ async def test_update_discount():
             "expiration": "2024-12-31T00:00:00",
             "days": "Tuesday",
             "card": "Updated Card",
-            "cardType": "Debit",
-            "paymentType": "Offline",
+            "cardType": "Silver",
+            "paymentType": "Debito",
             "bankName": "Updated Bank"
         }
         response = await ac.put(f"/discounts/{discount_id}", json=update_data)
@@ -236,7 +237,7 @@ async def test_update_discount():
 
 @pytest.mark.asyncio
 async def test_delete_discount():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un descuento primero para obtener su id
         discount_data = {
             "url": "http://test.com",
@@ -247,8 +248,8 @@ async def test_delete_discount():
             "expiration": "2024-12-31T00:00:00",
             "days": "Monday",
             "card": "Test Card",
-            "cardType": "Credit",
-            "paymentType": "Online",
+            "cardType": "Gold",
+            "paymentType": "Credito",
             "bankName": "Test Bank"
         }
         create_response = await ac.post("/discounts", json=discount_data)
@@ -260,14 +261,14 @@ async def test_delete_discount():
 
 @pytest.mark.asyncio
 async def test_get_users():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         response = await ac.get("/users")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
 @pytest.mark.asyncio
 async def test_read_user():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un usuario primero para obtener su id
         user_data = {"_id": "123", "auth0Id": "auth0|123", "cards": []}
         create_response = await ac.post("/users", json=user_data)
@@ -280,7 +281,7 @@ async def test_read_user():
 
 @pytest.mark.asyncio
 async def test_create_user():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         user_data = {"_id": "123", "auth0Id": "auth0|123", "cards": []}
         response = await ac.post("/users", json=user_data)
     assert response.status_code == 201
@@ -288,7 +289,7 @@ async def test_create_user():
 
 @pytest.mark.asyncio
 async def test_update_user():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un usuario primero para obtener su id
         user_data = {"_id": "123", "auth0Id": "auth0|123", "cards": []}
         create_response = await ac.post("/users", json=user_data)
@@ -302,14 +303,14 @@ async def test_update_user():
 
 @pytest.mark.asyncio
 async def test_add_card_to_user():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un usuario primero para obtener su id
         user_data = {"_id": "123", "auth0Id": "auth0|123", "cards": []}
         create_response = await ac.post("/users", json=user_data)
         user_id = create_response.json()["_id"]
 
         # Crea una tarjeta para asociar al usuario
-        card_data = {"bankId": "123", "cardType": "Credit", "bankName": "Test Bank", "paymentMethod": "Visa"}
+        card_data = {"bankId": "123", "cardType": "Gold", "bankName": "Test Bank", "paymentMethod": "Credito"}
         create_card_response = await ac.post("/cards", json=card_data)
         card_id = create_card_response.json()["id"]
 
@@ -319,14 +320,14 @@ async def test_add_card_to_user():
 
 @pytest.mark.asyncio
 async def test_delete_card_from_user():
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    async with AsyncClient(app=app, base_url=URL) as ac:
         # Crea un usuario primero para obtener su id
         user_data = {"_id": "123", "auth0Id": "auth0|123", "cards": []}
         create_response = await ac.post("/users", json=user_data)
         user_id = create_response.json()["_id"]
 
         # Crea una tarjeta para asociar al usuario
-        card_data = {"bankId": "123", "cardType": "Credit", "bankName": "Test Bank", "paymentMethod": "Visa"}
+        card_data = {"bankId": "123", "cardType": "Gold", "bankName": "Test Bank", "paymentMethod": "Credito"}
         create_card_response = await ac.post("/cards", json=card_data)
         card_id = create_card_response.json()["id"]
 
