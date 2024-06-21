@@ -1,6 +1,6 @@
 import pytest
 from httpx import AsyncClient
-from main import app  # Asegúrate de que esto apunte al archivo correcto donde inicias tu app FastAPI
+from main import app 
 
 @pytest.mark.asyncio
 async def test_get_banks():
