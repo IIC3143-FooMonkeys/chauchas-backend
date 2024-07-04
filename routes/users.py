@@ -17,15 +17,18 @@ async def get_users(page: int = 1, count: int = 25):
 
 @router.get("/users/{id}", response_model=User)
 async def read_user(id: str):
-    if (users := usersTable.find_one({"_id": str(id)})) is not None:
+    if (users := usersTable.find_one({"auth0Id": str(id)})) is not None:
         return userEntity(users)
     else:
+        new_id = str(id) if id else str(ObjectId())
         data = {
-            "userId": id,
-            "auth0Id": "",
+            "_id": new_id,
+            "auth0Id": id,
             "cards": []
         }
         usersTable.insert_one(userEntity(data))
+        newuser = usersTable.find_one({"auth0Id": str(id)})
+        return userEntity(newuser)
 
 @router.post("/users", response_model=User, status_code=status.HTTP_201_CREATED)
 async def create_user(user: User):
