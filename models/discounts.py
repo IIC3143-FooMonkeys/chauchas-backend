@@ -12,5 +12,5 @@ class Discount(BaseModel):
     days: str
     card: str
     cardType: str
-    paymentType: str
+    paymentMethod: str
     bankName: str
