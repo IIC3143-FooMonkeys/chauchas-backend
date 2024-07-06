@@ -17,7 +17,7 @@ async def get_banks(page: int = 1, count: int = 25):
 
 @router.get("/banks/{id}", response_model=Bank)
 async def read_bank(id: str):
-    if (banks := banksTable.find_one({"_id": ObjectId(id)})) is not None:
+    if (banks := banksTable.find_one({"id": id})) is not None:
         return bankEntity(banks)
     raise HTTPException(status_code=404, detail=f"Bank with id {id} not found")
 
@@ -31,15 +31,15 @@ async def create_bank(bank: Bank):
 
 @router.put("/banks/{id}", response_model=Bank)
 async def update_bank(id: str, bank: Bank):
-    if banksTable.find_one({"_id": ObjectId(id)}) is not None:
-        banksTable.update_one({"_id": ObjectId(id)}, {"$set": bank.model_dump()})
-        updated_bank = banksTable.find_one({"_id": ObjectId(id)})
+    if banksTable.find_one({"id": id}) is not None:
+        banksTable.update_one({"id": id}, {"$set": bank.model_dump()})
+        updated_bank = banksTable.find_one({"id": id})
         return bankEntity(updated_bank)
     raise HTTPException(status_code=404, detail=f"Bank with id {id} not found")
 
 @router.delete("/banks/{id}", response_model=Bank)
 async def delete_bank(id: str):
-    if (bank := banksTable.find_one({"_id": ObjectId(id)})) is not None:
-        banksTable.delete_one({"_id": ObjectId(id)})
+    if (bank := banksTable.find_one({"id": id})) is not None:
+        banksTable.delete_one({"id": id})
         return bankEntity(bank)
     raise HTTPException(status_code=404, detail=f"Bank with id {id} not found")

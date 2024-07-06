@@ -39,14 +39,16 @@ async def create_user(user: User):
 @router.get("/users/{id}/cards", response_model=User)
 async def read_user(id: str):
     if (user := usersTable.find_one({"auth0Id": str(id)})) is not None:
+        if userEntity(user)["cards"] == []:
+            raise HTTPException(status_code=404, detail=f"User with id {id} has no cards yet")
         return userEntity(user)
-    raise HTTPException(status_code=404, detail=f"User with id {id} has no cards yet")
+    raise HTTPException(status_code=400, detail=f"User with id {id} has not been registered yet")
 
 @router.put("/users/{id}", response_model=User)
 async def update_user(id: str, user: User):
-    if usersTable.find_one({"auth0Id": str(id)}) is not None:
+    if (user_before := usersTable.find_one({"auth0Id": str(id)})) is not None:
         usersTable.update_one({"auth0Id": str(id)}, {"$set": user.model_dump()})
-        updated_user = usersTable.find_one({"auth0Id": str(id)})
+        updated_user = usersTable.find_one({"_id": user_before["_id"]})
         return userEntity(updated_user)
     raise HTTPException(status_code=404, detail=f"User with id {id} not found")
 
@@ -60,7 +62,7 @@ async def add_card_to_user(userId: str, cardId: str):
         else:
             raise HTTPException(status_code=404, detail=f"Card with id {cardId} not found")
     else:
-        raise HTTPException(status_code=404, detail=f"User with id {userId} not found")
+        raise HTTPException(status_code=400, detail=f"User with id {userId} not found")
     
 @router.put("/users/{userId}/delete-card/{cardId}", response_model=User)
 async def add_card_to_user(userId: str, cardId: str):
@@ -77,4 +79,4 @@ async def add_card_to_user(userId: str, cardId: str):
         else:
             raise HTTPException(status_code=404, detail=f"User has no card with id {cardId}")
     else:
-        raise HTTPException(status_code=404, detail=f"User with id {userId} not found")
+        raise HTTPException(status_code=400, detail=f"User with id {userId} not found")

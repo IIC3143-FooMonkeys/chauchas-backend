@@ -55,7 +55,9 @@ def cardEntity(card) -> dict:
     
     bank = banksTable.find_one({"_id": ObjectId(card["bankId"])})
     if not bank:
-        raise ValueError(f"Bank with id {card['bankId']} not found")
+        bank = banksTable.find_one({"id": card["bankId"]})
+        if not bank:
+            raise ValueError(f"Bank with id {card['bankId']} not found")
 
     bank_data = bankEntity(bank)
     return {
@@ -67,17 +69,17 @@ def cardEntity(card) -> dict:
     }
 
 def userEntity(user) -> dict:
-    formatted_cards = [cardEntity(card) for card in user["cards"]]
-
-    if '_id' in user:
-        user['id'] = str(user['_id'])
-        del user['_id']
-
-    return {
-        "id": str(user["id"]),
-        "auth0Id": str(user["auth0Id"]),
-        "cards": formatted_cards
-    }
+    if user["cards"] is None:
+        return {
+            "auth0Id": str(user["auth0Id"]),
+            "cards": []
+        }
+    else:
+        formatted_cards = [cardEntity(card) for card in user["cards"]]
+        return {
+            "auth0Id": str(user["auth0Id"]),
+            "cards": formatted_cards
+        }
 
 def discountEntities(entity) -> list:
     return[discountEntity(discount) for discount in entity]
