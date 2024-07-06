@@ -24,7 +24,8 @@ async def read_user(id: str):
         data = {
             "_id": new_id,
             "auth0Id": id,
-            "cards": []
+            "cards": [],
+            "userType": 0
         }
         usersTable.insert_one(userEntity(data))
         newuser = usersTable.find_one({"auth0Id": str(id)})

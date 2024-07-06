@@ -72,13 +72,15 @@ def userEntity(user) -> dict:
     if user["cards"] is None:
         return {
             "auth0Id": str(user["auth0Id"]),
-            "cards": []
+            "cards": [],
+            "userType": int(user["userType"])
         }
     else:
         formatted_cards = [cardEntity(card) for card in user["cards"]]
         return {
             "auth0Id": str(user["auth0Id"]),
-            "cards": formatted_cards
+            "cards": formatted_cards,
+            "userType": int(user["userType"])
         }
 
 def discountEntities(entity) -> list:
