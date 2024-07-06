@@ -17,14 +17,14 @@ async def get_cards(page: int = 1, count: int = 25):
 
 @router.get("/cards/{id}", response_model=Card)
 async def read_card(id: str):
-    if (cards := cardsTable.find_one({"_id": ObjectId(id)})) is not None:
+    if (cards := cardsTable.find_one({"id": id})) is not None:
         return cardEntity(cards)
     raise HTTPException(status_code=404, detail=f"Card with id {id} not found")
 
-@router.get("/cards/by-bank", response_model=List[Card])
+@router.get("/cards/by-bank/{bankId}", response_model=List[Card])
 async def get_cards_by_bank(bankId: str, page: int = 1, count: int = 25):
     offset = (page - 1) * count
-    query = {"bankId": ObjectId(bankId)}
+    query = {"bankId": bankId}
 
     cards = list(cardsTable.find(query).skip(offset).limit(count))
     if not cards:
@@ -45,15 +45,15 @@ async def create_card(card: Card):
 
 @router.put("/cards/{id}", response_model=Card)
 async def update_card(id: str, card: Card):
-    if cardsTable.find_one({"_id": ObjectId(id)}) is not None:
-        cardsTable.update_one({"_id": ObjectId(id)}, {"$set": card.model_dump()})
-        updated_card = cardsTable.find_one({"_id": ObjectId(id)})
+    if cardsTable.find_one({"id": id}) is not None:
+        cardsTable.update_one({"id": id}, {"$set": card.model_dump()})
+        updated_card = cardsTable.find_one({"id": id})
         return cardEntity(updated_card)
     raise HTTPException(status_code=404, detail=f"Card with id {id} not found")
 
 @router.delete("/cards/{id}", response_model=Card)
 async def delete_card(id: str):
-    if (card := cardsTable.find_one({"_id": ObjectId(id)})) is not None:
-        cardsTable.delete_one({"_id": ObjectId(id)})
+    if (card := cardsTable.find_one({"id": id})) is not None:
+        cardsTable.delete_one({"id": id})
         return cardEntity(card)
     raise HTTPException(status_code=404, detail=f"Card with id {id} not found")

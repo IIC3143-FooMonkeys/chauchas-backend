@@ -17,7 +17,7 @@ async def get_categories(page: int = 1, count: int = 25):
 
 @router.get("/categories/{id}", response_model=Category)
 async def read_category(id: str):
-    if (categories := categoriesTable.find_one({"_id": ObjectId(id)})) is not None:
+    if (categories := categoriesTable.find_one({"id": id})) is not None:
         return categoryEntity(categories)
     raise HTTPException(status_code=404, detail=f"Category with id {id} not found")
 
@@ -31,15 +31,15 @@ async def create_category(category: Category):
 
 @router.put("/categories/{id}", response_model=Category)
 async def update_category(id: str, category: Category):
-    if categoriesTable.find_one({"_id": ObjectId(id)}) is not None:
-        categoriesTable.update_one({"_id": ObjectId(id)}, {"$set": category.model_dump()})
-        updated_category = categoriesTable.find_one({"_id": ObjectId(id)})
+    if categoriesTable.find_one({"id": id}) is not None:
+        categoriesTable.update_one({"id": id}, {"$set": category.model_dump()})
+        updated_category = categoriesTable.find_one({"id": id})
         return categoryEntity(updated_category)
     raise HTTPException(status_code=404, detail=f"Category with id {id} not found")
 
 @router.delete("/categories/{id}", response_model=Category)
 async def delete_category(id: str):
-    if (category := categoriesTable.find_one({"_id": ObjectId(id)})) is not None:
-        categoriesTable.delete_one({"_id": ObjectId(id)})
+    if (category := categoriesTable.find_one({"id": id})) is not None:
+        categoriesTable.delete_one({"id": id})
         return categoryEntity(category)
     raise HTTPException(status_code=404, detail=f"Category with id {id} not found")
