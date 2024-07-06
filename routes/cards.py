@@ -57,3 +57,13 @@ async def delete_card(id: str):
         cardsTable.delete_one({"id": id})
         return cardEntity(card)
     raise HTTPException(status_code=404, detail=f"Card with id {id} not found")
+
+@router.get("/paymentMethod", response_model=List[str])
+async def get_payment_methods():
+    payment_methods = cardsTable.distinct("paymentMethod")
+    return payment_methods
+
+@router.get("/cardType", response_model=List[str])
+async def get_card_types():
+    card_types = cardsTable.distinct("cardType")
+    return card_types
