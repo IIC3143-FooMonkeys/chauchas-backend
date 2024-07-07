@@ -28,6 +28,7 @@ def discountEntity(discount) -> dict:
     return {
         "id": discount["id"],
         "url": str(discount["url"]),
+        "imageUrl": str(discount["imageUrl"]),
         "local": str(discount["local"]),
         "discount": int(discount["discount"]),
         "description": str(discount["description"]),

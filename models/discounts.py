@@ -4,6 +4,7 @@ import datetime as d
 class Discount(BaseModel):
     id: str
     url: str
+    imageUrl: str
     local: str
     discount: int
     description: str
