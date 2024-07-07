@@ -73,6 +73,7 @@ async def test_update_discount():
         updateInfo = {
         "id": disc["id"],
         "url": disc["url"],
+        "imageUrl": disc["imageUrl"],
         "local": disc["local"],
         "discount": disc["discount"] + 5,
         "description": disc["description"],
@@ -98,6 +99,7 @@ async def test_update_invalid_discount():
         updateInfo = {
             "id": disc["id"],
             "url": disc["url"],
+            "imageUrl": disc["imageUrl"],
             "local": disc["local"],
             "discount": disc["discount"] + 5,
             "description": disc["description"],
