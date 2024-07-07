@@ -32,12 +32,40 @@ async def test_get_one_existent_user():
 async def test_create_user():
     async with AsyncClient(app=app, base_url=URL) as ac:
         fakeId = str(ObjectId())
-        print(fakeId)
         user_data = {"auth0Id": fakeId, "cards": [], "userType": 0}
         creation_response = await ac.post(f"/users?userId={admin}", json=user_data)
 
     assert creation_response.status_code == 201
     assert creation_response.json()["auth0Id"] == fakeId
+
+@pytest.mark.asyncio
+async def test_look_user_discounts():
+    async with AsyncClient(app=app, base_url=URL) as ac:
+        fakeId = str(ObjectId())
+        user_data = {"auth0Id": fakeId, "cards": [], "userType": 0}
+        creation_response = await ac.post(f"/users?userId={admin}", json=user_data)
+        look_card_response = await ac.get(f"/cards")
+        card = look_card_response.json()[0]["id"]
+        add_card_response = await ac.put(f"/users/{fakeId}/add-card/{card}")
+        next_response = await ac.get(f"/users/{fakeId}/discounts")
+    assert next_response.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_see_discounts_no_cards():
+    async with AsyncClient(app=app, base_url=URL) as ac:
+        fakeId = str(ObjectId())
+        user_data = {"auth0Id": fakeId, "cards": [], "userType": 0}
+        response = await ac.post(f"/users?userId={admin}", json=user_data)
+        creation_response = await ac.get(f"/users/{fakeId}/discounts")
+    assert creation_response.status_code == 404
+
+@pytest.mark.asyncio
+async def test_see_discounts_no_user():
+    async with AsyncClient(app=app, base_url=URL) as ac:
+        fakeId = str(ObjectId())
+        creation_response = await ac.get(f"/users/{fakeId}/discounts")
+    assert creation_response.status_code == 400
 
 @pytest.mark.asyncio
 async def test_delete_user():

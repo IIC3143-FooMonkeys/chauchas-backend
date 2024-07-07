@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException, status,Depends
 from typing import List
 from models.users import User
-from schema.schema import userEntity, userEntities
-from config.database import cardsTable, usersTable
+from models.discounts import Discount
+from schema.schema import userEntity, userEntities, discountEntities
+from config.database import cardsTable, usersTable, discountsTable
 from bson import ObjectId
 
 router = APIRouter()
@@ -54,6 +55,29 @@ async def read_user(id: str):
             raise HTTPException(status_code=404, detail=f"User with id {id} has no cards yet")
         return userEntity(user)
     raise HTTPException(status_code=400, detail=f"User with id {id} has not been registered yet")
+
+
+@router.get("/users/{id}/discounts", response_model=List[Discount])
+async def get_user_discounts(id: str):
+    user = usersTable.find_one({"auth0Id": str(id)})
+    if user is None:
+        raise HTTPException(status_code=400, detail=f"User with id {id} has not been registered yet")
+
+    user = userEntity(user)
+    if not user["cards"]:
+        raise HTTPException(status_code=404, detail=f"User with id {id} has no cards yet")
+
+    all_discounts = []
+    for card in user["cards"]:
+        query = {
+            "cardType": card["cardType"],
+            "bankName": card["bankName"],
+            "paymentMethod": card["paymentMethod"]
+        }
+        discounts = list(discountsTable.find(query))
+        all_discounts.extend(discountEntities(discounts))
+
+    return all_discounts
 
 @router.put("/users/{id}", response_model=User)
 async def update_user(id: str, user: User, userId: str = Depends(verify_user)):
