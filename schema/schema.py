@@ -28,6 +28,7 @@ def discountEntity(discount) -> dict:
     return {
         "id": discount["id"],
         "url": str(discount["url"]),
+        "imageUrl": str(discount["imageUrl"]),
         "local": str(discount["local"]),
         "discount": int(discount["discount"]),
         "description": str(discount["description"]),
@@ -36,7 +37,7 @@ def discountEntity(discount) -> dict:
         "days": str(discount["days"]),
         "card": str(discount["card"]),
         "cardType": str(discount["cardType"]),
-        "paymentType": str(discount["paymentType"]),
+        "paymentMethod": str(discount["paymentMethod"]),
         "bankName": str(discount["bankName"])
     }
 def bankEntity(bank) -> dict:
@@ -69,17 +70,14 @@ def cardEntity(card) -> dict:
     }
 
 def userEntity(user) -> dict:
-    if user["cards"] is None:
-        return {
-            "auth0Id": str(user["auth0Id"]),
-            "cards": []
-        }
-    else:
-        formatted_cards = [cardEntity(card) for card in user["cards"]]
-        return {
-            "auth0Id": str(user["auth0Id"]),
-            "cards": formatted_cards
-        }
+    formatted_cards = [cardEntity(card) for card in user["cards"]]
+
+    return {
+        "_id": str(user["auth0Id"]),
+        "auth0Id": str(user["auth0Id"]),
+        "cards": formatted_cards,
+        "userType": int(user["userType"])
+    }
 
 def discountEntities(entity) -> list:
     return[discountEntity(discount) for discount in entity]

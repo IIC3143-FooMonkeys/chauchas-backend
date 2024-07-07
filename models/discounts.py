@@ -4,6 +4,7 @@ import datetime as d
 class Discount(BaseModel):
     id: str
     url: str
+    imageUrl: str
     local: str
     discount: int
     description: str
@@ -12,5 +13,5 @@ class Discount(BaseModel):
     days: str
     card: str
     cardType: str
-    paymentType: str
+    paymentMethod: str
     bankName: str

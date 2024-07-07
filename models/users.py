@@ -4,3 +4,4 @@ class User(BaseModel):
     _id: str
     auth0Id: str
     cards: list
+    userType: int
